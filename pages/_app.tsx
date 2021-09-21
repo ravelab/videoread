@@ -1,7 +1,14 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+import { AppContextProvider } from '../src/web/contexts/appContexts'
+
+import '../styles/globals.css'
+
+function VideoRead({ Component, pageProps }: AppProps): JSX.Element {
+  return (
+    <AppContextProvider>
+      <Component {...pageProps} />
+    </AppContextProvider>
+  )
 }
-export default MyApp
+export default VideoRead
