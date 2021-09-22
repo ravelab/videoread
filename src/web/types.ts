@@ -1,19 +1,11 @@
-import { YouTubePlayer } from 'youtube-player/dist/types'
-
 export interface NoteType {
   id: string
-  timestamp: number | null
   text: string
+  timestamp?: number
 }
 
 export interface VideoType {
   id: string
-  lastWatched: string
-  notes: NoteType[]
-}
-
-export interface AppStateType {
-  videos: VideoType[]
-  seekTo: number | null
-  player: YouTubePlayer | null
+  title: string
+  lastWatched: number
 }

@@ -1,10 +1,23 @@
 import { useContext, useEffect } from 'react'
 import YouTube, { Options } from 'react-youtube'
 import { YouTubePlayer } from 'youtube-player/dist/types'
+import TextField from '@mui/material/TextField'
 
 import { actions, AppContext } from '../../contexts/appContexts'
 
 import styles from './VideoPlayer.module.css'
+import { VideoType } from '../../types'
+
+const youTubeGetID = (url: string) => {
+  const [a, , b] = url
+    .replace(/(>|<)/gi, '')
+    .split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+  if (b !== undefined) {
+    return b.split(/[^0-9a-z_-]/i)[0]
+  } else {
+    return a
+  }
+}
 
 const opts: Options = {
   playerVars: {
@@ -18,35 +31,62 @@ const opts: Options = {
 }
 
 const VideoPlayer = (): JSX.Element => {
-  const [{ videos, seekTo, player }, dispatchToAppState] =
+  const [{ currentVideoId, seekTo, player, deviceType }, dispatchToAppState] =
     useContext(AppContext)
 
   const onReady = (event: { target: YouTubePlayer }) => {
     dispatchToAppState({ type: actions.SET_PLAYER, payload: event.target })
-    // access to player in all event handlers via event.target
     event.target.playVideo()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    console.log('info: ', (event.target as any).getVideoData())
+    const info = (event.target as any).getVideoData()
+    const video: VideoType = {
+      id: info.video_id,
+      title: info.title,
+      lastWatched: new Date().toISOString(),
+    }
+    dispatchToAppState({ type: actions.ADD_VIDEO, payload: event.target })
   }
 
   useEffect(() => {
-    if (seekTo !== null) {
+    if (seekTo !== undefined) {
       player?.seekTo(seekTo, true)
       dispatchToAppState({ type: actions.CLEAR_SEEK_TO })
     }
   }, [dispatchToAppState, player, seekTo])
 
-  // getVideoInfo is obsolete
-  // https://github.com/orizens/ngx-youtube-player/issues/20
-  // new way: http://www.youtube.com/get_video_info?video_id={id}
+  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const url = e.clipboardData.getData('text/plain')
+    const videoId = youTubeGetID(url)
+    dispatchToAppState({ type: actions.PLAY_VIDEO, payload: videoId })
+  }
+
+  const urlPasteArea = (
+    <TextField
+      style={{
+        width: deviceType === 'mobile' ? '60%' : '30%',
+        padding: 4,
+      }}
+      variant="outlined"
+      placeholder="Paste YouTube URL Here"
+      inputProps={{ onPaste }}
+      value=""
+    />
+  )
 
   return (
     <div
       style={{
-        width: '100%',
+        width: deviceType === 'mobile' ? '100%' : 'calc(100% - 380px)',
       }}
     >
-      <div className={styles.autoResizableIframe}>
-        <YouTube videoId={videos[0].id} opts={opts} onReady={onReady} />
-      </div>
+      {deviceType === 'mobile' && urlPasteArea}
+      {currentVideoId && (
+        <div className={styles.autoResizableIframe}>
+          <YouTube videoId={currentVideoId} opts={opts} onReady={onReady} />
+        </div>
+      )}
+      {deviceType !== 'mobile' && urlPasteArea}
     </div>
   )
 }

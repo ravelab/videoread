@@ -1,34 +1,36 @@
 import React, { useReducer } from 'react'
 import { YouTubePlayer } from 'youtube-player/dist/types'
 
-import { AppStateType, NoteType } from '../types'
+import { VideoType, NoteType } from '../types'
+
+interface AppStateType {
+  videos: VideoType[]
+  notes: NoteType[]
+  currentVideoId?: string
+  seekTo?: number
+  player?: YouTubePlayer
+  deviceType?: string
+}
 
 const initialState: AppStateType = {
-  videos: [
-    {
-      id: 'mYcLuWHzfmE',
-      lastWatched: 'date',
-      notes: [
-        {
-          id: 'f289f2a3-0e96-4dc4-93bd-6565899c4900',
-          timestamp: 10,
-          text: 'note after 10 seconds',
-        },
-        {
-          id: 'bf288a6c-fd15-46ea-8681-3d21c7a2555a',
-          timestamp: 20,
-          text: 'note after 20 seconds',
-        },
-      ],
-    },
-  ],
-  player: null,
-  seekTo: null,
+  videos: [],
+  notes: [],
+  currentVideoId: undefined,
+  player: undefined,
+  seekTo: undefined,
+  deviceType: undefined,
 }
 
 type Action = {
   type: string
-  payload?: string | number | NoteType | YouTubePlayer | null
+  payload?:
+    | string
+    | number
+    | NoteType
+    | YouTubePlayer
+    | VideoType[]
+    | NoteType[]
+    | VideoType
 }
 
 const AppContext = React.createContext<[AppStateType, React.Dispatch<Action>]>([
@@ -47,32 +49,35 @@ const actions = {
   PREPONE_TIMESTAMP: 'PREPONE_TIMESTAMP',
   POSTPONE_TIMESTAMP: 'POSTPONE_TIMESTAMP',
   SET_PLAYER: 'SET_PLAYER',
+  PLAY_VIDEO: 'PLAY_VIDEO',
+  SET_VIDEOS: 'SET_VIDEOS',
+  ADD_VIDEO: 'ADD_VIDEO',
+  SET_NOTES: 'SET_NOTES',
+  SET_DEVICE_TYPE: 'SET_DEVICE_TYPE',
 }
 
-const compare = (a: NoteType, b: NoteType) =>
+const compareNotes = (a: NoteType, b: NoteType) =>
   Number(a.timestamp) - Number(b.timestamp)
+
+const compareVideos = (a: VideoType, b: VideoType) =>
+  b.lastWatched - a.lastWatched
 
 const reducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case actions.DELETE_NOTE: {
       return {
         ...state,
-        videos: [
-          {
-            ...state.videos[0],
-            notes: [
-              ...state.videos[0].notes.filter(
-                (note) => note.id !== (action.payload as string)
-              ),
-            ],
-          },
+        notes: [
+          ...state.notes.filter(
+            (note) => note.id !== (action.payload as string)
+          ),
         ],
       }
     }
 
     case actions.UPDATE_NOTE: {
       const { id, text } = action.payload as NoteType
-      const notes = state.videos[0].notes.map((note) => {
+      const notes = state.notes.map((note) => {
         if (note.id === id) {
           return {
             ...note,
@@ -83,29 +88,45 @@ const reducer = (state = initialState, action: Action) => {
       })
       return {
         ...state,
-        videos: [
-          {
-            ...state.videos[0],
-            notes,
-          },
-        ],
+        notes,
       }
     }
 
     case actions.ADD_NOTE: {
-      const notes = [
-        ...state.videos[0].notes,
-        { ...(action.payload as NoteType) },
-      ].sort(compare)
+      const notes = [...state.notes, { ...(action.payload as NoteType) }].sort(
+        compareNotes
+      )
       return {
         ...state,
-        videos: [
-          {
-            ...state.videos[0],
-            notes,
-          },
-        ],
+        notes,
       }
+    }
+
+    case actions.PREPONE_TIMESTAMP:
+    case actions.POSTPONE_TIMESTAMP: {
+      const offset = action.type === actions.PREPONE_TIMESTAMP ? -1 : 1
+      const notes = state.notes
+        .map((note) => {
+          if (note.id === (action.payload as string)) {
+            return {
+              ...note,
+              timestamp:
+                note.timestamp !== undefined && note.timestamp + offset > 0
+                  ? note.timestamp + offset
+                  : 0,
+            }
+          }
+          return note
+        })
+        .sort(compareNotes)
+      return {
+        ...state,
+        notes,
+      }
+    }
+
+    case actions.SET_NOTES: {
+      return { ...state, notes: action.payload as NoteType[] }
     }
 
     case actions.SEEK_TO: {
@@ -113,39 +134,31 @@ const reducer = (state = initialState, action: Action) => {
     }
 
     case actions.CLEAR_SEEK_TO: {
-      return { ...state, seekTo: null }
-    }
-
-    case actions.PREPONE_TIMESTAMP:
-    case actions.POSTPONE_TIMESTAMP: {
-      const offset = action.type === actions.PREPONE_TIMESTAMP ? -1 : 1
-      const notes = state.videos[0].notes
-        .map((note) => {
-          if (note.id === (action.payload as string)) {
-            return {
-              ...note,
-              timestamp:
-                note.timestamp !== null && note.timestamp + offset > 0
-                  ? note.timestamp + offset
-                  : 0,
-            }
-          }
-          return note
-        })
-        .sort(compare)
-      return {
-        ...state,
-        videos: [
-          {
-            ...state.videos[0],
-            notes,
-          },
-        ],
-      }
+      return { ...state, seekTo: undefined }
     }
 
     case actions.SET_PLAYER: {
       return { ...state, player: action.payload as YouTubePlayer }
+    }
+
+    case actions.PLAY_VIDEO: {
+      return { ...state, currentVideoId: action.payload as string }
+    }
+
+    case actions.SET_VIDEOS: {
+      return { ...state, videos: action.payload as VideoType[] }
+    }
+
+    case actions.ADD_VIDEO: {
+      const videos = [
+        ...state.videos,
+        { ...(action.payload as VideoType) },
+      ].sort(compareVideos)
+      return { ...state, videos }
+    }
+
+    case actions.SET_DEVICE_TYPE: {
+      return { ...state, deviceType: action.payload as string }
     }
 
     default: {

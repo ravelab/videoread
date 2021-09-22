@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
     "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
@@ -25,9 +25,9 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@types/react": "17.0.21",
+    "@types/react": "17.0.24",
     "@types/uuid": "^8.3.1",
-    "@types/youtube-player": "^5.5.4",
+    "@types/youtube-player": "^5.5.5",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "typescript": "4.4.3"

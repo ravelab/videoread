@@ -43,7 +43,7 @@ const Note: React.FC<NoteProps> = ({ note }) => {
   }
 
   const handleTextFieldFocus = () => {
-    if (note.timestamp === null && player) {
+    if (note.timestamp === undefined && player) {
       dispatchToAppState({
         type: actions.ADD_NOTE,
         payload: { ...note, timestamp: Math.floor(player.getCurrentTime()) },
@@ -61,7 +61,7 @@ const Note: React.FC<NoteProps> = ({ note }) => {
       >
         <IconButton onClick={handleTimestampClick}>
           <Typography fontSize="small">
-            {note.timestamp !== null
+            {note.timestamp !== undefined
               ? new Date(note.timestamp * 1000).toISOString().substr(12, 7)
               : 'h:mm:ss'}
           </Typography>
