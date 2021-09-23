@@ -55,7 +55,6 @@ const VideoPlayer = (): JSX.Element => {
         width: deviceType === 'mobile' ? '100%' : 'calc(100% - 380px)',
       }}
     >
-      {deviceType === 'mobile' && <Menu />}
       {currentVideoId && (
         <div className={styles.autoResizableIframe}>
           <YouTube
@@ -66,7 +65,7 @@ const VideoPlayer = (): JSX.Element => {
           />
         </div>
       )}
-      {deviceType !== 'mobile' && <Menu />}
+      <Menu />
     </div>
   )
 }

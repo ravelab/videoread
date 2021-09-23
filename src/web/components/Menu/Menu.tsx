@@ -26,7 +26,7 @@ const Menu = (): JSX.Element => {
   }
 
   const handleHistoryClick = () => {
-    return
+    dispatchToAppState({ type: actions.SET_OPEN_WATCH_HISTORY, payload: true })
   }
 
   return (

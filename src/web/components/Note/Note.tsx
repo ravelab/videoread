@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
@@ -52,20 +53,27 @@ const Note: React.FC<NoteProps> = ({ note }) => {
   }
 
   return (
-    <Card sx={{ display: 'flex' }}>
+    <Card sx={{ display: 'flex', backgroundColor: 'lightgrey', margin: '2px' }}>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        <IconButton onClick={handleTimestampClick}>
+        <Button
+          style={{
+            textTransform: 'none',
+            color: 'darkslategray',
+            marginTop: 6,
+          }}
+          onClick={handleTimestampClick}
+        >
           <Typography fontSize="small">
             {note.timestamp !== undefined
               ? new Date(note.timestamp * 1000).toISOString().substr(12, 7)
               : 'h:mm:ss'}
           </Typography>
-        </IconButton>
+        </Button>
         <Box
           sx={{
             display: 'flex',
@@ -83,7 +91,7 @@ const Note: React.FC<NoteProps> = ({ note }) => {
         placeholder="Note"
         multiline
         minRows={2}
-        style={{ width: '100%' }}
+        style={{ width: '100%', backgroundColor: 'whitesmoke' }}
         InputProps={{ style: { fontSize: 14 } }}
         value={note.text}
         onChange={handleTextFieldChange}

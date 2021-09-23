@@ -12,6 +12,7 @@ interface AppStateType {
   deviceType?: string
   videosLoaded: boolean
   notesLoaded: boolean
+  openWatchHistory: boolean
 }
 
 const initialState: AppStateType = {
@@ -23,6 +24,7 @@ const initialState: AppStateType = {
   deviceType: undefined,
   videosLoaded: false,
   notesLoaded: false,
+  openWatchHistory: false,
 }
 
 type Action = {
@@ -35,6 +37,7 @@ type Action = {
     | VideoType[]
     | NoteType[]
     | VideoType
+    | boolean
 }
 
 const AppContext = React.createContext<[AppStateType, React.Dispatch<Action>]>([
@@ -56,8 +59,10 @@ const actions = {
   PLAY_VIDEO: 'PLAY_VIDEO',
   LOAD_VIDEOS: 'LOAD_VIDEOS',
   UPSERT_VIDEO: 'UPSERT_VIDEO',
+  DELETE_VIDEO: 'DELETE_VIDEO',
   LOAD_NOTES: 'LOAD_NOTES',
   SET_DEVICE_TYPE: 'SET_DEVICE_TYPE',
+  SET_OPEN_WATCH_HISTORY: 'SET_OPEN_WATCH_HISTORY',
 }
 
 const compareNotes = (a: NoteType, b: NoteType) =>
@@ -175,8 +180,23 @@ const reducer = (state = initialState, action: Action) => {
       return { ...state, videos }
     }
 
+    case actions.DELETE_VIDEO: {
+      return {
+        ...state,
+        videos: [
+          ...state.videos.filter(
+            (video) => video.id !== (action.payload as string)
+          ),
+        ],
+      }
+    }
+
     case actions.SET_DEVICE_TYPE: {
       return { ...state, deviceType: action.payload as string }
+    }
+
+    case actions.SET_OPEN_WATCH_HISTORY: {
+      return { ...state, openWatchHistory: action.payload as boolean }
     }
 
     default: {

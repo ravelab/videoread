@@ -5,7 +5,7 @@ import throttle from 'lodash/throttle'
 
 import VideoPlayer from '../src/web/components/VideoPlayer/VideoPlayer'
 import NoteList from '../src/web/components/NoteList/NoteList'
-import PlayList from '../src/web/components/PlayList/PlayList'
+import WatchHistory from '../src/web/components/WatchHistory/WatchHistory'
 import { actions, AppContext } from '../src/web/contexts/appContexts'
 import { NoteType, VideoType } from '../src/web/types'
 
@@ -124,6 +124,7 @@ const Home: NextPage<HomeProps> = ({ deviceType }) => {
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0"
         />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="description" content="the best way to learn from videos" />
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </Head>
@@ -131,9 +132,9 @@ const Home: NextPage<HomeProps> = ({ deviceType }) => {
       <main
         className={deviceType === 'mobile' ? styles.mainMobile : styles.main}
       >
-        <VideoPlayer />
         <NoteList deviceType={deviceType} />
-        <PlayList />
+        <VideoPlayer />
+        <WatchHistory />
       </main>
     </div>
   )
