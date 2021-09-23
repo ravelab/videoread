@@ -29,7 +29,7 @@ const NoteList: React.FC<NoteListProps> = ({ deviceType }): JSX.Element => {
   useEffect(() => {
     if (currentVideoId) {
       dispatchToAppState({
-        type: actions.SET_NOTES,
+        type: actions.LOAD_NOTES,
         payload: localStorageNotes,
       })
     }

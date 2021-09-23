@@ -17,6 +17,7 @@
     "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
+    "lodash": "^4.17.21",
     "next": "11.1.2",
     "prettier": "^2.4.1",
     "react": "17.0.2",
@@ -25,6 +26,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.173",
     "@types/react": "17.0.24",
     "@types/uuid": "^8.3.1",
     "@types/youtube-player": "^5.5.5",

@@ -10,6 +10,8 @@ interface AppStateType {
   seekTo?: number
   player?: YouTubePlayer
   deviceType?: string
+  videosLoaded: boolean
+  notesLoaded: boolean
 }
 
 const initialState: AppStateType = {
@@ -19,6 +21,8 @@ const initialState: AppStateType = {
   player: undefined,
   seekTo: undefined,
   deviceType: undefined,
+  videosLoaded: false,
+  notesLoaded: false,
 }
 
 type Action = {
@@ -50,9 +54,9 @@ const actions = {
   POSTPONE_TIMESTAMP: 'POSTPONE_TIMESTAMP',
   SET_PLAYER: 'SET_PLAYER',
   PLAY_VIDEO: 'PLAY_VIDEO',
-  SET_VIDEOS: 'SET_VIDEOS',
-  ADD_VIDEO: 'ADD_VIDEO',
-  SET_NOTES: 'SET_NOTES',
+  LOAD_VIDEOS: 'LOAD_VIDEOS',
+  UPSERT_VIDEO: 'UPSERT_VIDEO',
+  LOAD_NOTES: 'LOAD_NOTES',
   SET_DEVICE_TYPE: 'SET_DEVICE_TYPE',
 }
 
@@ -125,8 +129,12 @@ const reducer = (state = initialState, action: Action) => {
       }
     }
 
-    case actions.SET_NOTES: {
-      return { ...state, notes: action.payload as NoteType[] }
+    case actions.LOAD_NOTES: {
+      return {
+        ...state,
+        notes: action.payload as NoteType[],
+        notesLoaded: true,
+      }
     }
 
     case actions.SEEK_TO: {
@@ -142,16 +150,26 @@ const reducer = (state = initialState, action: Action) => {
     }
 
     case actions.PLAY_VIDEO: {
-      return { ...state, currentVideoId: action.payload as string }
+      return {
+        ...state,
+        currentVideoId: action.payload as string,
+        notesLoaded: false,
+      }
     }
 
-    case actions.SET_VIDEOS: {
-      return { ...state, videos: action.payload as VideoType[] }
+    case actions.LOAD_VIDEOS: {
+      return {
+        ...state,
+        videos: action.payload as VideoType[],
+        videosLoaded: true,
+      }
     }
 
-    case actions.ADD_VIDEO: {
+    case actions.UPSERT_VIDEO: {
       const videos = [
-        ...state.videos,
+        ...state.videos.filter(
+          (video) => video.id !== (action.payload as VideoType).id
+        ),
         { ...(action.payload as VideoType) },
       ].sort(compareVideos)
       return { ...state, videos }

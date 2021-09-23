@@ -3,8 +3,8 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import ArrowDropUpIcon from '@mui/icons-material/ArrowLeft'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowRight'
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import TextField from '@mui/material/TextField'
 
 import { AppContext, actions } from '../../contexts/appContexts'
@@ -72,10 +72,10 @@ const Note: React.FC<NoteProps> = ({ note }) => {
           }}
         >
           <IconButton onClick={handlePreponeClick}>
-            <ArrowDropUpIcon fontSize="small" />
+            <ArrowLeftIcon fontSize="small" />
           </IconButton>
           <IconButton onClick={handlePostponeClick}>
-            <ArrowDropDownIcon fontSize="small" />
+            <ArrowRightIcon fontSize="small" />
           </IconButton>
         </Box>
       </Box>
