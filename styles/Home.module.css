@@ -3,7 +3,8 @@
   flex-direction: row-reverse;
 }
 
-.mainMobile {
-  display: flex;
-  flex-direction: column;
+@media (max-width: 899px) {
+  .main {
+    flex-direction: column;
+  }
 }

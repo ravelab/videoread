@@ -11,22 +11,6 @@ import { NoteType, VideoType } from '../src/web/types'
 
 import styles from '../styles/Home.module.css'
 
-// eslint-disable-next-line
-export async function getServerSideProps(context: any) {
-  const UA = context.req.headers['user-agent']
-  const isMobile = Boolean(
-    UA.match(
-      /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
-    )
-  )
-
-  return {
-    props: {
-      deviceType: isMobile ? 'mobile' : 'desktop',
-    },
-  }
-}
-
 const saveVideosIfNeeded = throttle((videos: VideoType[]) => {
   const videosJson = JSON.stringify(videos)
   const storageVideosJson = localStorage.getItem('videos')
@@ -49,20 +33,11 @@ const saveNotesIfNeeded = throttle(
   5000
 )
 
-interface HomeProps {
-  deviceType: string
-}
-
-const Home: NextPage<HomeProps> = ({ deviceType }) => {
+const Home: NextPage = () => {
   const [
     { videos, notes, currentVideoId, videosLoaded, notesLoaded },
     dispatchToAppState,
   ] = useContext(AppContext)
-
-  // set device type
-  useEffect(() => {
-    dispatchToAppState({ type: actions.SET_DEVICE_TYPE, payload: deviceType })
-  }, [deviceType, dispatchToAppState])
 
   // save videos
   useEffect(() => {
@@ -129,10 +104,8 @@ const Home: NextPage<HomeProps> = ({ deviceType }) => {
         <link rel="shortcut icon" href="/images/favicon.ico" />
       </Head>
 
-      <main
-        className={deviceType === 'mobile' ? styles.mainMobile : styles.main}
-      >
-        <NoteList deviceType={deviceType} />
+      <main className={styles.main}>
+        <NoteList />
         <VideoPlayer />
         <WatchHistory />
       </main>

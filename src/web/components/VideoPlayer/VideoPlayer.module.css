@@ -1,3 +1,13 @@
+.videoPlayerContainer {
+  width: calc(100% - 380px);
+}
+
+@media (max-width: 899px) {
+  .videoPlayerContainer {
+    width: 100%;
+  }
+}
+
 .autoResizableIframe {
   margin: 0px auto;
 }

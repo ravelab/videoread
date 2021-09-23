@@ -20,7 +20,7 @@ const opts: Options = {
 }
 
 const VideoPlayer = (): JSX.Element => {
-  const [{ currentVideoId, seekTo, player, deviceType }, dispatchToAppState] =
+  const [{ currentVideoId, seekTo, player }, dispatchToAppState] =
     useContext(AppContext)
 
   useEffect(() => {
@@ -29,12 +29,12 @@ const VideoPlayer = (): JSX.Element => {
     }
   }, [player, seekTo])
 
-  const onReady = (event: { target: YouTubePlayer }) => {
+  const handleReady = (event: { target: YouTubePlayer }) => {
     dispatchToAppState({ type: actions.SET_PLAYER, payload: event.target })
     event.target.playVideo()
   }
 
-  const onPlay = (event: { target: YouTubePlayer }) => {
+  const handlePlay = (event: { target: YouTubePlayer }) => {
     if (seekTo !== undefined) {
       dispatchToAppState({ type: actions.CLEAR_SEEK_TO })
     } else {
@@ -50,18 +50,14 @@ const VideoPlayer = (): JSX.Element => {
   }
 
   return (
-    <div
-      style={{
-        width: deviceType === 'mobile' ? '100%' : 'calc(100% - 380px)',
-      }}
-    >
+    <div className={styles.videoPlayerContainer}>
       {currentVideoId && (
         <div className={styles.autoResizableIframe}>
           <YouTube
             videoId={currentVideoId}
             opts={opts}
-            onReady={onReady}
-            onPlay={onPlay}
+            onReady={handleReady}
+            onPlay={handlePlay}
           />
         </div>
       )}

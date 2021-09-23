@@ -1,0 +1,29 @@
+.card {
+  display: flex;
+  background-color: lightgrey;
+  margin: 2px;
+}
+
+.timestampControlContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.timestampButton {
+  text-transform: none;
+  color: darkslategray;
+}
+
+.arrowsContainer {
+  display: flex;
+}
+
+.textField {
+  width: 100%;
+  background-color: whitesmoke;
+}
+
+.input {
+  font-size: 15px;
+  padding: 13px 12px;
+}

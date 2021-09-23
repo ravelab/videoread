@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField'
 import { AppContext, actions } from '../../contexts/appContexts'
 import { NoteType } from '../../types'
 
+import styles from './Note.module.css'
+
 interface NoteProps {
   note: NoteType
 }
@@ -53,19 +55,10 @@ const Note: React.FC<NoteProps> = ({ note }) => {
   }
 
   return (
-    <Card sx={{ display: 'flex', backgroundColor: 'lightgrey', margin: '2px' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+    <Card className={styles.card}>
+      <Box className={styles.timestampControlContainer}>
         <Button
-          style={{
-            textTransform: 'none',
-            color: 'darkslategray',
-            marginTop: 6,
-          }}
+          className={styles.timestampButton}
           onClick={handleTimestampClick}
         >
           <Typography fontSize="small">
@@ -74,11 +67,7 @@ const Note: React.FC<NoteProps> = ({ note }) => {
               : 'h:mm:ss'}
           </Typography>
         </Button>
-        <Box
-          sx={{
-            display: 'flex',
-          }}
-        >
+        <Box className={styles.arrowsContainer}>
           <IconButton onClick={handlePreponeClick}>
             <ArrowLeftIcon fontSize="small" />
           </IconButton>
@@ -91,8 +80,8 @@ const Note: React.FC<NoteProps> = ({ note }) => {
         placeholder="Note"
         multiline
         minRows={2}
-        style={{ width: '100%', backgroundColor: 'whitesmoke' }}
-        InputProps={{ style: { fontSize: 14 } }}
+        className={styles.textField}
+        InputProps={{ className: styles.input }}
         value={note.text}
         onChange={handleTextFieldChange}
         onBlur={handleTextFieldBlur}

@@ -6,8 +6,10 @@ import Video from '../Video/Video'
 import { actions, AppContext } from '../../contexts/appContexts'
 import { VideoType } from '../../types'
 
+import styles from './WatchHistory.module.css'
+
 const WatchHistory = (): JSX.Element => {
-  const [{ deviceType, openWatchHistory, videos }, dispatchToAppState] =
+  const [{ openWatchHistory, videos }, dispatchToAppState] =
     useContext(AppContext)
 
   const handleClose = () => {
@@ -16,23 +18,8 @@ const WatchHistory = (): JSX.Element => {
 
   return (
     <Modal open={openWatchHistory} onClose={handleClose}>
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: '#ddd',
-          outline: 'none',
-          width: deviceType === 'mobile' ? '90%' : 480,
-          overflowY: 'auto',
-          maxHeight: deviceType === 'mobile' ? '20vh' : '100vh',
-        }}
-      >
-        <Typography
-          style={{ margin: '10px 0 0 16px', color: 'darkslategray' }}
-          variant="h6"
-        >
+      <div className={styles.watchHistoryContainer}>
+        <Typography className={styles.header} variant="h6">
           Watch History:
         </Typography>
         {videos.length > 0 ? (

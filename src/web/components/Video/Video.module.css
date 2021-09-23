@@ -1,0 +1,10 @@
+.card {
+  display: flex;
+  margin: 8px 16px;
+}
+
+.titleContainer {
+  text-transform: none;
+  width: 100%;
+  color: darkslategray;
+}

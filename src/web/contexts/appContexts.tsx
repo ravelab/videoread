@@ -9,7 +9,6 @@ interface AppStateType {
   currentVideoId?: string
   seekTo?: number
   player?: YouTubePlayer
-  deviceType?: string
   videosLoaded: boolean
   notesLoaded: boolean
   openWatchHistory: boolean
@@ -21,7 +20,6 @@ const initialState: AppStateType = {
   currentVideoId: undefined,
   player: undefined,
   seekTo: undefined,
-  deviceType: undefined,
   videosLoaded: false,
   notesLoaded: false,
   openWatchHistory: false,
@@ -61,7 +59,6 @@ const actions = {
   UPSERT_VIDEO: 'UPSERT_VIDEO',
   DELETE_VIDEO: 'DELETE_VIDEO',
   LOAD_NOTES: 'LOAD_NOTES',
-  SET_DEVICE_TYPE: 'SET_DEVICE_TYPE',
   SET_OPEN_WATCH_HISTORY: 'SET_OPEN_WATCH_HISTORY',
 }
 
@@ -189,10 +186,6 @@ const reducer = (state = initialState, action: Action) => {
           ),
         ],
       }
-    }
-
-    case actions.SET_DEVICE_TYPE: {
-      return { ...state, deviceType: action.payload as string }
     }
 
     case actions.SET_OPEN_WATCH_HISTORY: {

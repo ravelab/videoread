@@ -1,0 +1,23 @@
+.watchHistoryContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ddd;
+  outline: none;
+  width: 580px;
+  overflow-y: auto;
+  max-height: 90%;
+  padding-bottom: 12px;
+}
+
+@media (max-width: 899px) {
+  .watchHistoryContainer {
+    width: 90%;
+  }
+}
+
+.header {
+  margin: 10px 0 0 16px;
+  color: darkslategray;
+}

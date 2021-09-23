@@ -5,11 +5,9 @@ import { AppContext } from '../../contexts/appContexts'
 import { NoteType } from '../../types'
 import Note from '../Note/Note'
 
-interface NoteListProps {
-  deviceType: string
-}
+import styles from './NoteList.module.css'
 
-const NoteList: React.FC<NoteListProps> = ({ deviceType }): JSX.Element => {
+const NoteList = (): JSX.Element => {
   const [{ currentVideoId, notes }] = useContext(AppContext)
 
   const noteList = [
@@ -26,14 +24,7 @@ const NoteList: React.FC<NoteListProps> = ({ deviceType }): JSX.Element => {
   ]
 
   return (
-    <div
-      style={{
-        width: deviceType === 'mobile' ? '100%' : 380,
-        overflowY: 'auto',
-        maxHeight: deviceType === 'mobile' ? '20vh' : '100vh',
-        padding: 0,
-      }}
-    >
+    <div className={styles.noteListContainer}>
       {currentVideoId &&
         noteList.map((note) => <Note key={note.id} note={note} />)}
     </div>

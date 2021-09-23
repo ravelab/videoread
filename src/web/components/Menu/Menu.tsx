@@ -5,6 +5,8 @@ import IconButton from '@mui/material/IconButton'
 
 import { actions, AppContext } from '../../contexts/appContexts'
 
+import styles from './Menu.module.css'
+
 const youTubeGetID = (url: string) => {
   const [a, , b] = url
     .replace(/(>|<)/gi, '')
@@ -17,9 +19,9 @@ const youTubeGetID = (url: string) => {
 }
 
 const Menu = (): JSX.Element => {
-  const [{ deviceType }, dispatchToAppState] = useContext(AppContext)
+  const [, dispatchToAppState] = useContext(AppContext)
 
-  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const url = e.clipboardData.getData('text/plain')
     const videoId = youTubeGetID(url)
     dispatchToAppState({ type: actions.PLAY_VIDEO, payload: videoId })
@@ -30,27 +32,17 @@ const Menu = (): JSX.Element => {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
+    <div className={styles.menuContainer}>
       <IconButton onClick={handleHistoryClick}>
         <HistoryIcon fontSize="large" />
       </IconButton>
       <TextField
-        style={{
-          width: '224px',
-          padding: 4,
-        }}
+        className={styles.pasteArea}
         variant="outlined"
         placeholder="Paste YouTube URL Here"
         inputProps={{
-          onPaste,
-          style: {
-            padding:
-              deviceType === 'mobile' ? '10px 14px 10px' : '12px 14px 9px',
-          },
+          onPaste: handlePaste,
+          className: styles.input,
         }}
         value=""
       />

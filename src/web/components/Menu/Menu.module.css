@@ -1,0 +1,18 @@
+.menuContainer {
+  display: flex;
+}
+
+.pasteArea {
+  width: 224px;
+  padding: 4px;
+}
+
+.input {
+  padding: 12px 14px 9px;
+}
+
+@media (max-width: 899px) {
+  .input {
+    width: 10px 14px 10px;
+  }
+}

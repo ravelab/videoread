@@ -8,6 +8,8 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { AppContext, actions } from '../../contexts/appContexts'
 import { VideoType } from '../../types'
 
+import styles from './Video.module.css'
+
 interface VideoProps {
   video: VideoType
 }
@@ -27,11 +29,8 @@ const Video: React.FC<VideoProps> = ({ video }) => {
   }
 
   return (
-    <Card sx={{ display: 'flex', margin: 2 }}>
-      <Button
-        style={{ textTransform: 'none', width: '100%', color: 'darkslategray' }}
-        onClick={handleTitleClick}
-      >
+    <Card className={styles.card}>
+      <Button className={styles.titleContainer} onClick={handleTitleClick}>
         <Typography fontSize="large">{video.title}</Typography>
       </Button>
       {video.id && (
