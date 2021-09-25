@@ -8,6 +8,30 @@
 @media (max-width: 899px) {
   .noteListContainer {
     width: 100%;
-    max-height: 150px;
+    max-height: 120px;
+  }
+}
+
+@media (max-width: 899px) and (min-device-height: 812px) {
+  .noteListContainer {
+    max-height: 130px;
+  }
+}
+
+@media (max-width: 899px) and (min-device-height: 844px) {
+  .noteListContainer {
+    max-height: 146px;
+  }
+}
+
+@media (max-width: 899px) and (min-device-height: 896px) {
+  .noteListContainer {
+    max-height: 178px;
+  }
+}
+
+@media (max-width: 899px) and (min-device-height: 926px) {
+  .noteListContainer {
+    max-height: 196px;
   }
 }

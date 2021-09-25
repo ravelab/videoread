@@ -77,7 +77,7 @@ const Note: React.FC<NoteProps> = ({ note }) => {
         </Box>
       </Box>
       <TextField
-        placeholder="Note"
+        placeholder="Notes"
         multiline
         minRows={2}
         className={styles.textField}

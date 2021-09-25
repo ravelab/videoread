@@ -3,7 +3,7 @@
 }
 
 .pasteArea {
-  width: 224px;
+  min-width: 224px;
   padding: 4px;
 }
 
@@ -15,4 +15,14 @@
   .input {
     width: 10px 14px 10px;
   }
+}
+
+.title {
+  padding: 10px 12px;
+  color: #333;
+}
+
+.slogan {
+  padding: 4px 12px;
+  color: darkslategrey;
 }

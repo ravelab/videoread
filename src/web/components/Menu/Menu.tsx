@@ -1,7 +1,9 @@
 import { useContext } from 'react'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import HistoryIcon from '@mui/icons-material/History'
 import IconButton from '@mui/material/IconButton'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { actions, AppContext } from '../../contexts/appContexts'
 
@@ -19,7 +21,9 @@ const youTubeGetID = (url: string) => {
 }
 
 const Menu = (): JSX.Element => {
-  const [, dispatchToAppState] = useContext(AppContext)
+  const isMobile = useMediaQuery('(max-width:799px)')
+  const [{ videos, currentVideoId }, dispatchToAppState] =
+    useContext(AppContext)
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const url = e.clipboardData.getData('text/plain')
@@ -31,21 +35,36 @@ const Menu = (): JSX.Element => {
     dispatchToAppState({ type: actions.SET_OPEN_WATCH_HISTORY, payload: true })
   }
 
+  const { title } = videos.find((video) => video.id === currentVideoId) || {}
+
+  const titleDisplay = title && (
+    <Typography className={styles.title} variant="h6">
+      {title}
+    </Typography>
+  )
+
   return (
-    <div className={styles.menuContainer}>
-      <IconButton onClick={handleHistoryClick}>
-        <HistoryIcon fontSize="large" />
-      </IconButton>
-      <TextField
-        className={styles.pasteArea}
-        variant="outlined"
-        placeholder="Paste YouTube URL Here"
-        inputProps={{
-          onPaste: handlePaste,
-          className: styles.input,
-        }}
-        value=""
-      />
+    <div>
+      <div className={styles.menuContainer}>
+        <IconButton onClick={handleHistoryClick}>
+          <HistoryIcon fontSize="large" />
+        </IconButton>
+        <TextField
+          className={styles.pasteArea}
+          variant="outlined"
+          placeholder="Paste YouTube URL here"
+          inputProps={{
+            onPaste: handlePaste,
+            className: styles.input,
+          }}
+          value=""
+        />
+        {!isMobile && titleDisplay}
+      </div>
+      {isMobile && titleDisplay}
+      <Typography className={styles.slogan} variant="h5">
+        VideoRead - Take good notes from videos
+      </Typography>
     </div>
   )
 }

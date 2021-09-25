@@ -49,6 +49,10 @@ const VideoPlayer = (): JSX.Element => {
     }
   }
 
+  const handleError = (error: { target: YouTubePlayer }) => {
+    console.log(error)
+  }
+
   return (
     <div className={styles.videoPlayerContainer}>
       {currentVideoId && (
@@ -58,6 +62,7 @@ const VideoPlayer = (): JSX.Element => {
             opts={opts}
             onReady={handleReady}
             onPlay={handlePlay}
+            onError={handleError}
           />
         </div>
       )}
