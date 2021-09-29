@@ -7,8 +7,6 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { actions, AppContext } from '../../contexts/appContexts'
 
-import styles from './Menu.module.css'
-
 const youTubeGetID = (url: string) => {
   const [a, , b] = url
     .replace(/(>|<)/gi, '')
@@ -38,31 +36,49 @@ const Menu = (): JSX.Element => {
   const { title } = videos.find((video) => video.id === currentVideoId) || {}
 
   const titleDisplay = title && (
-    <Typography className={styles.title} variant="h6">
+    <Typography
+      sx={{
+        padding: '10px 12px',
+        color: '#333',
+      }}
+      variant="h6"
+    >
       {title}
     </Typography>
   )
 
   return (
     <div>
-      <div className={styles.menuContainer}>
+      <div
+        style={{
+          display: 'flex',
+        }}
+      >
         <IconButton onClick={handleHistoryClick}>
           <HistoryIcon fontSize="large" />
         </IconButton>
         <TextField
-          className={styles.pasteArea}
+          sx={{ minWidth: '224px', padding: '4px' }}
           variant="outlined"
           placeholder="Paste YouTube URL here"
           inputProps={{
             onPaste: handlePaste,
-            className: styles.input,
+            style: {
+              padding: isMobile ? '10px 14px' : '12px 14px 9px',
+            },
           }}
           value=""
         />
         {!isMobile && titleDisplay}
       </div>
       {isMobile && titleDisplay}
-      <Typography className={styles.slogan} variant="h5">
+      <Typography
+        sx={{
+          padding: '4px 12px',
+          color: 'darkslategrey',
+        }}
+        variant="h5"
+      >
         VideoRead - Take good notes from videos
       </Typography>
     </div>

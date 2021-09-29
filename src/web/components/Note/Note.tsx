@@ -7,11 +7,35 @@ import Typography from '@mui/material/Typography'
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import TextField from '@mui/material/TextField'
+import { styled } from '@mui/material/styles'
 
 import { AppContext, actions } from '../../contexts/appContexts'
 import { NoteType } from '../../types'
 
-import styles from './Note.module.css'
+const StyledCard = styled(Card)(() => ({
+  display: 'flex',
+  backgroundColor: 'lightgrey',
+  margin: '2px',
+}))
+
+const TimestampControlContainer = styled(Box)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+}))
+
+const TimestampButton = styled(Button)(() => ({
+  textTransform: 'none',
+  color: 'darkslategray',
+}))
+
+const ArrowsContainer = styled(Box)(() => ({
+  display: 'flex',
+}))
+
+const StyledTextField = styled(TextField)(() => ({
+  width: '100%',
+  backgroundColor: 'whitesmoke',
+}))
 
 interface NoteProps {
   note: NoteType
@@ -55,39 +79,40 @@ const Note: React.FC<NoteProps> = ({ note }) => {
   }
 
   return (
-    <Card className={styles.card}>
-      <Box className={styles.timestampControlContainer}>
-        <Button
-          className={styles.timestampButton}
-          onClick={handleTimestampClick}
-        >
+    <StyledCard>
+      <TimestampControlContainer>
+        <TimestampButton onClick={handleTimestampClick}>
           <Typography fontSize="small">
             {note.timestamp !== undefined
               ? new Date(note.timestamp * 1000).toISOString().substr(12, 7)
               : 'h:mm:ss'}
           </Typography>
-        </Button>
-        <Box className={styles.arrowsContainer}>
+        </TimestampButton>
+        <ArrowsContainer>
           <IconButton onClick={handlePreponeClick}>
             <ArrowLeftIcon fontSize="small" />
           </IconButton>
           <IconButton onClick={handlePostponeClick}>
             <ArrowRightIcon fontSize="small" />
           </IconButton>
-        </Box>
-      </Box>
-      <TextField
+        </ArrowsContainer>
+      </TimestampControlContainer>
+      <StyledTextField
         placeholder="Notes"
         multiline
         minRows={2}
-        className={styles.textField}
-        InputProps={{ className: styles.input }}
+        InputProps={{
+          style: {
+            fontSize: '15px',
+            padding: '13px 12px',
+          },
+        }}
         value={note.text}
         onChange={handleTextFieldChange}
         onBlur={handleTextFieldBlur}
         onFocus={handleTextFieldFocus}
       />
-    </Card>
+    </StyledCard>
   )
 }
 

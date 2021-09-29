@@ -4,11 +4,21 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { styled } from '@mui/material/styles'
 
 import { AppContext, actions } from '../../contexts/appContexts'
 import { VideoType } from '../../types'
 
-import styles from './Video.module.css'
+const Title = styled(Button)(() => ({
+  textTransform: 'none',
+  width: '100%',
+  color: 'darkslategray',
+}))
+
+const StyledCard = styled(Card)(() => ({
+  display: 'flex',
+  margin: '8px 16px',
+}))
 
 interface VideoProps {
   video: VideoType
@@ -29,16 +39,16 @@ const Video: React.FC<VideoProps> = ({ video }) => {
   }
 
   return (
-    <Card className={styles.card}>
-      <Button className={styles.titleContainer} onClick={handleTitleClick}>
+    <StyledCard>
+      <Title onClick={handleTitleClick}>
         <Typography fontSize="large">{video.title}</Typography>
-      </Button>
+      </Title>
       {video.id && (
         <IconButton onClick={handleDeleteClick}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       )}
-    </Card>
+    </StyledCard>
   )
 }
 

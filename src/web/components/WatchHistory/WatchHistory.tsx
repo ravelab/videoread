@@ -19,7 +19,13 @@ const WatchHistory = (): JSX.Element => {
   return (
     <Modal open={openWatchHistory} onClose={handleClose}>
       <div className={styles.watchHistoryContainer}>
-        <Typography className={styles.header} variant="h6">
+        <Typography
+          sx={{
+            margin: '10px 0 0 16px',
+            color: 'darkslategray',
+          }}
+          variant="h6"
+        >
           Watch History:
         </Typography>
         {videos.length > 0 ? (
