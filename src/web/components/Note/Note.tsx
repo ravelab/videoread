@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import Router from 'next/router'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import IconButton from '@mui/material/IconButton'
@@ -42,10 +43,11 @@ interface NoteProps {
 }
 
 const Note: React.FC<NoteProps> = ({ note }) => {
-  const [{ player }, dispatchToAppState] = useContext(AppContext)
+  const [{ player, currentVideoId }, dispatchToAppState] =
+    useContext(AppContext)
 
   const handleTimestampClick = () => {
-    dispatchToAppState({ type: actions.SEEK_TO, payload: note.timestamp })
+    Router.push(`/?v=${currentVideoId}&t=${note.timestamp}`)
   }
 
   const handlePreponeClick = () => {

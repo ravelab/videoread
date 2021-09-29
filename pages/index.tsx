@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Script from 'next/script'
 import { useEffect, useContext } from 'react'
+import { useRouter } from 'next/router'
 import throttle from 'lodash/throttle'
 
 import VideoPlayer from '../src/web/components/VideoPlayer/VideoPlayer'
@@ -38,6 +40,9 @@ const Home: NextPage = () => {
     { videos, notes, currentVideoId, videosLoaded, notesLoaded },
     dispatchToAppState,
   ] = useContext(AppContext)
+  const {
+    query: { v, t },
+  } = useRouter()
 
   // save videos
   useEffect(() => {
@@ -86,13 +91,22 @@ const Home: NextPage = () => {
 
   // play the most recent video
   useEffect(() => {
-    if (videos.length > 0) {
-      dispatchToAppState({ type: actions.PLAY_VIDEO, payload: videos[0].id })
+    if (v) {
+      dispatchToAppState({ type: actions.PLAY_VIDEO, payload: v as string })
+      if (t) {
+        dispatchToAppState({
+          type: actions.SEEK_TO,
+          payload: t as unknown as number,
+        })
+      }
     }
-  }, [videos, dispatchToAppState])
+    // else if (videos.length > 0) {
+    //   videoId = videos[0].id
+    // }
+  }, [videos, dispatchToAppState, v, t])
 
   return (
-    <div>
+    <>
       <Head>
         <title>VideoRead - Take good notes from videos</title>
         <meta
@@ -109,7 +123,21 @@ const Home: NextPage = () => {
         <VideoPlayer />
         <WatchHistory />
       </main>
-    </div>
+      <Script
+        id="_informizely_script_tag"
+        dangerouslySetInnerHTML={{
+          __html: `
+            var IzWidget = IzWidget || {};
+            (function (d) {
+              var scriptElement = d.createElement('script');
+              scriptElement.type = 'text/javascript'; scriptElement.async = true;
+              scriptElement.src = "https://insitez.blob.core.windows.net/site/9036e24c-aaeb-4d69-9d21-4d80b244702e.js";
+              var node = d.getElementById('_informizely_script_tag');
+              node.parentNode.insertBefore(scriptElement, node);
+            })(document);`,
+        }}
+      />
+    </>
   )
 }
 

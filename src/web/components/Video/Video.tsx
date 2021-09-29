@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import Router from 'next/router'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
@@ -29,7 +30,7 @@ const Video: React.FC<VideoProps> = ({ video }) => {
 
   const handleTitleClick = () => {
     if (video.id) {
-      dispatchToAppState({ type: actions.PLAY_VIDEO, payload: video.id })
+      Router.push(`/?v=${video.id}`)
     }
     dispatchToAppState({ type: actions.SET_OPEN_WATCH_HISTORY, payload: false })
   }

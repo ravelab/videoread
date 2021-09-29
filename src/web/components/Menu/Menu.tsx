@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import Router from 'next/router'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import HistoryIcon from '@mui/icons-material/History'
@@ -26,7 +27,7 @@ const Menu = (): JSX.Element => {
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const url = e.clipboardData.getData('text/plain')
     const videoId = youTubeGetID(url)
-    dispatchToAppState({ type: actions.PLAY_VIDEO, payload: videoId })
+    Router.push(`/?v=${videoId}`)
   }
 
   const handleHistoryClick = () => {
