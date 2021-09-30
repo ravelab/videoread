@@ -64,16 +64,20 @@ const Home: NextPage = () => {
 
   // play specified video
   useEffect(() => {
-    if (isReady && v) {
+    if (v) {
       dispatchToAppState({ type: actions.PLAY_VIDEO, payload: v as string })
-      if (t) {
-        dispatchToAppState({
-          type: actions.SEEK_TO,
-          payload: t as unknown as number,
-        })
-      }
     }
-  }, [dispatchToAppState, isReady, v, t])
+  }, [dispatchToAppState, v])
+
+  // video seek
+  useEffect(() => {
+    if (t) {
+      dispatchToAppState({
+        type: actions.SEEK_TO,
+        payload: Number(t),
+      })
+    }
+  }, [dispatchToAppState, t])
 
   // play the most recent video
   useEffect(() => {
