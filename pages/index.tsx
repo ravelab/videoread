@@ -81,8 +81,9 @@ const Home: NextPage = () => {
 
   // play the most recent video
   useEffect(() => {
-    if (isReady && !v && videos.length > 0) {
-      Router.push(`/?v=${videos[0].id}`)
+    if (isReady && !v) {
+      const videoId = videos.length > 0 ? videos[0].id : '2uUQTExOoVM' // the tutorial video
+      Router.push(`/?v=${videoId}`)
     }
   }, [dispatchToAppState, isReady, v, t, videos])
 
