@@ -1,7 +1,7 @@
 .noteListContainer {
   width: 380px;
   overflow-y: auto;
-  max-height: calc(100vh - 40px);
+  max-height: 100vh;
   padding: 0;
 }
 
