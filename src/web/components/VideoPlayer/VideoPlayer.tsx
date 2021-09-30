@@ -50,7 +50,7 @@ const VideoPlayer = (): JSX.Element => {
   }
 
   const handleError = (error: { target: YouTubePlayer }) => {
-    console.log(error)
+    console.error(error)
   }
 
   return (

@@ -1,39 +1,22 @@
 import type { NextPage } from 'next'
+import Router from 'next/router'
 import Head from 'next/head'
 import Script from 'next/script'
 import { useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
-import throttle from 'lodash/throttle'
 
 import VideoPlayer from '../src/web/components/VideoPlayer/VideoPlayer'
 import NoteList from '../src/web/components/NoteList/NoteList'
 import WatchHistory from '../src/web/components/WatchHistory/WatchHistory'
 import { actions, AppContext } from '../src/web/contexts/appContexts'
-import { NoteType, VideoType } from '../src/web/types'
+import {
+  saveVideosIfNeeded,
+  saveNotesIfNeeded,
+  loadVideos,
+  loadNotes,
+} from '../src/web/services/storage'
 
 import styles from '../styles/Home.module.css'
-
-const saveVideosIfNeeded = throttle((videos: VideoType[]) => {
-  const videosJson = JSON.stringify(videos)
-  const storageVideosJson = localStorage.getItem('videos')
-  if (videosJson !== storageVideosJson) {
-    //console.log("setItem('videos': ", videosJson)
-    localStorage.setItem('videos', videosJson)
-  }
-}, 5000)
-
-const saveNotesIfNeeded = throttle(
-  (notes: NoteType[], currentVideoId: string) => {
-    const key = `notes-${currentVideoId}`
-    const notesJson = JSON.stringify(notes)
-    const storageNotesJson = localStorage.getItem(key)
-    if (notesJson !== storageNotesJson) {
-      //console.log('setItem(', key, notesJson)
-      localStorage.setItem(key, notesJson)
-    }
-  },
-  5000
-)
 
 const Home: NextPage = () => {
   const [
@@ -41,6 +24,7 @@ const Home: NextPage = () => {
     dispatchToAppState,
   ] = useContext(AppContext)
   const {
+    isReady,
     query: { v, t },
   } = useRouter()
 
@@ -61,14 +45,9 @@ const Home: NextPage = () => {
   // load videos
   useEffect(() => {
     if (!videosLoaded) {
-      const storageVideosJson = localStorage.getItem('videos') || '[]'
-      let payload: VideoType[] = []
-      try {
-        payload = JSON.parse(storageVideosJson)
-      } catch (e) {}
       dispatchToAppState({
         type: actions.LOAD_VIDEOS,
-        payload,
+        payload: loadVideos(),
       })
     }
   }, [dispatchToAppState, videosLoaded])
@@ -76,22 +55,16 @@ const Home: NextPage = () => {
   // load notes
   useEffect(() => {
     if (!notesLoaded && currentVideoId) {
-      const storageNotesJson =
-        localStorage.getItem(`notes-${currentVideoId}`) || '[]'
-      let payload: VideoType[] = []
-      try {
-        payload = JSON.parse(storageNotesJson)
-      } catch (e) {}
       dispatchToAppState({
         type: actions.LOAD_NOTES,
-        payload,
+        payload: loadNotes(currentVideoId),
       })
     }
   }, [currentVideoId, notesLoaded, dispatchToAppState])
 
-  // play the most recent video
+  // play specified video
   useEffect(() => {
-    if (v) {
+    if (isReady && v) {
       dispatchToAppState({ type: actions.PLAY_VIDEO, payload: v as string })
       if (t) {
         dispatchToAppState({
@@ -100,10 +73,14 @@ const Home: NextPage = () => {
         })
       }
     }
-    // else if (videos.length > 0) {
-    //   videoId = videos[0].id
-    // }
-  }, [videos, dispatchToAppState, v, t])
+  }, [dispatchToAppState, isReady, v, t])
+
+  // play the most recent video
+  useEffect(() => {
+    if (isReady && !v && videos.length > 0) {
+      Router.push(`/?v=${videos[0].id}`)
+    }
+  }, [dispatchToAppState, isReady, v, t, videos])
 
   return (
     <>

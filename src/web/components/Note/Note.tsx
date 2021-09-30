@@ -47,7 +47,11 @@ const Note: React.FC<NoteProps> = ({ note }) => {
     useContext(AppContext)
 
   const handleTimestampClick = () => {
-    Router.push(`/?v=${currentVideoId}&t=${note.timestamp}`)
+    if (note.timestamp) {
+      Router.push(
+        `/?v=${currentVideoId}&t=${note.timestamp + (Math.random() - 0.5) / 10}`
+      )
+    }
   }
 
   const handlePreponeClick = () => {
