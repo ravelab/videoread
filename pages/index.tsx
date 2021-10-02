@@ -15,6 +15,7 @@ import {
   loadVideos,
   loadNotes,
 } from '../src/web/services/storage'
+import { GA_TRACKING_ID } from '../lib/analytics'
 
 import styles from '../styles/Home.module.css'
 
@@ -98,6 +99,21 @@ const Home: NextPage = () => {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="description" content="the best way to learn from videos" />
         <link rel="shortcut icon" href="/images/favicon.ico" />
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+
+                      gtag('config', '${GA_TRACKING_ID}', {
+                          page: window.location.pathname
+                      });`,
+          }}
+        />
       </Head>
 
       <main className={styles.main}>
