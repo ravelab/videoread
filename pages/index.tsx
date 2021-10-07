@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import Router from 'next/router'
 import Head from 'next/head'
-import Script from 'next/script'
 import { useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 
@@ -114,6 +113,17 @@ const Home: NextPage = () => {
                       });`,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w) {
+                var s = document.createElement('script');
+                s.src = 'https://survey.survicate.com/workspaces/12f83352e0b9022d0c6881d1e15d995f/web_surveys.js';
+                s.async = true;
+                var e = document.getElementsByTagName('script')[0];
+                e.parentNode.insertBefore(s, e);
+              })(window);`,
+          }}
+        />
       </Head>
 
       <main className={styles.main}>
@@ -121,20 +131,6 @@ const Home: NextPage = () => {
         <VideoPlayer />
         <WatchHistory />
       </main>
-      <Script
-        id="_informizely_script_tag"
-        dangerouslySetInnerHTML={{
-          __html: `
-            var IzWidget = IzWidget || {};
-            (function (d) {
-              var scriptElement = d.createElement('script');
-              scriptElement.type = 'text/javascript'; scriptElement.async = true;
-              scriptElement.src = "https://insitez.blob.core.windows.net/site/9036e24c-aaeb-4d69-9d21-4d80b244702e.js";
-              var node = d.getElementById('_informizely_script_tag');
-              node.parentNode.insertBefore(scriptElement, node);
-            })(document);`,
-        }}
-      />
     </>
   )
 }
